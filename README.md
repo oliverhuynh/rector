@@ -33,6 +33,13 @@ Options you might set per run:
 
 Drop `--dry-run` to apply changes when satisfied.
 
+Example: upgrading the Salient theme
+```bash
+cd ~/localprojects/financial/public_html/wp-content/themes/salient
+do-rector --dry-run   # review changes
+do-rector             # apply changes
+```
+
 ### Direct composer invocation
 ```bash
 cd /home/oliver/localprojects/rector
