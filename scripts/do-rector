@@ -3,8 +3,9 @@ set -euo pipefail
 TARGET_PHP=${TARGET_PHP:-8.3}
 RECTOR_PATHS=${RECTOR_PATHS:-.}
 
-# Resolve project root based on this script's location (../ from scripts/)
-SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
+# Resolve project root based on the real path of this script (works with symlinks)
+SCRIPT_PATH=$(readlink -f "$0")
+SCRIPT_DIR=$(cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd)
 PROJECT_ROOT=$(cd -- "$SCRIPT_DIR/.." && pwd)
 
 CONFIG=${CONFIG:-"$PROJECT_ROOT/rector.php"}
