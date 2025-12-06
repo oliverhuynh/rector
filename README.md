@@ -6,8 +6,19 @@ A small Rector distribution you can point at any PHP project to automatically up
 - PHP >= 8.1 (matches Rector 2.x requirements)
 - Composer
 
-## Install
+## Install options
+
+**A. Global (recommended for convenience)**
 ```bash
+yarn global add https://github.com/oliverhuynh/rector.git
+# ensure PHP >= 8.1 is available; set PHP_BIN if your default is older
+```
+Postinstall runs `composer install` inside the package so `vendor/bin/rector` is available. If install is interrupted, run `composer install` manually in the installed package directory (e.g., `~/.config/yarn/global/node_modules/rector-php8-upgrade`).
+
+**B. Local clone**
+```bash
+git clone https://github.com/oliverhuynh/rector.git
+cd rector
 composer install
 ```
 
@@ -19,17 +30,22 @@ By default the config targets PHP 8.3 and runs on the current working directory.
 - `PHP_BIN`: path to a PHP ≥ 8.1 CLI (useful if the system default is older).
 - `AUTOLOAD`: path to the target project's `vendor/autoload.php` (defaults to `$PWD/vendor/autoload.php`).
 
-### Quick helper (recommended)
-Add `scripts` to your `PATH` once, then just call `do-rector` from any project you want to upgrade:
+### Quick helper usage
+After install (global or local), ensure the script is on your PATH.
+- Global yarn install puts it on PATH automatically as `do-rector`.
+- Local clone: add `scripts` to PATH: `export PATH="/home/oliver/localprojects/rector/scripts:$PATH"`.
+
+Use inside the project you want to upgrade:
 ```bash
-export PATH="/home/oliver/localprojects/rector/scripts:$PATH"
-do-rector --dry-run
+do-rector --dry-run   # review changes
+do-rector            # apply changes
 ```
-Options you might set per run:
-- `TARGET_PHP=8.4 do-rector --dry-run` (target a different PHP level)
-- `PHP_BIN=php8.2 do-rector` (choose a PHP ≥8.1 binary if your default is older)
-- `AUTOLOAD=/path/to/vendor/autoload.php do-rector` (if not in `./vendor/autoload.php`)
-- `RECTOR_PATHS="src,tests" do-rector` (override the paths; default is `.`)
+
+Per-run options (env vars):
+- `TARGET_PHP=8.4 do-rector --dry-run` — target a different PHP level (default 8.3)
+- `PHP_BIN=php8.2 do-rector` — pick a PHP ≥ 8.1 binary if default is older
+- `AUTOLOAD=/path/to/vendor/autoload.php do-rector` — if autoload isn’t at `./vendor/autoload.php`
+- `RECTOR_PATHS="src,tests" do-rector` — override paths; default is `.`
 
 Drop `--dry-run` to apply changes when satisfied.
 
