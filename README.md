@@ -40,6 +40,13 @@ do-rector --dry-run   # review changes
 do-rector             # apply changes
 ```
 
+### One-step global install (via yarn)
+Requires PHP ≥ 8.1 and Composer on PATH.
+```bash
+yarn global add https://github.com/oliverhuynh/rector.git
+```
+This runs `composer install` during postinstall and exposes the `do-rector` executable globally. After install, just run `do-rector --dry-run` inside any project you want to upgrade.
+
 ### Direct composer invocation
 ```bash
 cd /home/oliver/localprojects/rector

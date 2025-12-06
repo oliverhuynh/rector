@@ -1,0 +1,12 @@
+{
+  "name": "rector-php8-upgrade",
+  "version": "1.0.0",
+  "description": "Wrapper to run Rector PHP 8 upgrade preset via yarn global add",
+  "license": "MIT",
+  "bin": {
+    "do-rector": "scripts/do-rector"
+  },
+  "scripts": {
+    "postinstall": "composer install --no-interaction --no-progress"
+  }
+}
