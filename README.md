@@ -45,7 +45,7 @@ Requires PHP ≥ 8.1 and Composer on PATH.
 ```bash
 yarn global add https://github.com/oliverhuynh/rector.git
 ```
-This runs `composer install` during postinstall and exposes the `do-rector` executable globally. After install, just run `do-rector --dry-run` inside any project you want to upgrade.
+This runs `composer install` during postinstall and exposes the `do-rector` executable globally. If the install is interrupted or `composer install` fails, run `composer install` manually inside the package directory (where Yarn installs it) so that `vendor/bin/rector` exists. After install, just run `do-rector --dry-run` inside any project you want to upgrade.
 
 ### Direct composer invocation
 ```bash

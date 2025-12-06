@@ -33,6 +33,12 @@ fi
 
 cmd=("$PHP_BIN" "$RECTOR_BIN" process --config="$CONFIG")
 
+if [ ! -x "$RECTOR_BIN" ]; then
+  echo "[do-rector] error: Rector executable not found at '$RECTOR_BIN'." >&2
+  echo "            Run 'composer install' in '$PROJECT_ROOT' (postinstall should have done this)." >&2
+  exit 1
+fi
+
 if [ -f "$AUTOLOAD" ]; then
   cmd+=(--autoload-file "$AUTOLOAD")
 else
