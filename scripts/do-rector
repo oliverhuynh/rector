@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+TARGET_PHP=${TARGET_PHP:-8.3}
+RECTOR_PATHS=${RECTOR_PATHS:-.}
+
+# Resolve project root based on this script's location (../ from scripts/)
+SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
+PROJECT_ROOT=$(cd -- "$SCRIPT_DIR/.." && pwd)
+
+CONFIG=${CONFIG:-"$PROJECT_ROOT/rector.php"}
+RECTOR_BIN=${RECTOR_BIN:-"$PROJECT_ROOT/vendor/bin/rector"}
+# Allow choosing a specific PHP executable (needed if system default is <8.1)
+PHP_BIN=${PHP_BIN:-php}
+# Default autoload: current working dir vendor/autoload.php
+AUTOLOAD=${AUTOLOAD:-"$PWD/vendor/autoload.php"}
+
+# --- PHP version guard ----------------------------------------------------
+if ! command -v "$PHP_BIN" >/dev/null 2>&1; then
+  echo "[do-rector] error: PHP binary '$PHP_BIN' not found. Set PHP_BIN to a PHP >= 8.1 executable." >&2
+  exit 1
+fi
+
+PHP_VERSION_ID=$("$PHP_BIN" -r 'echo PHP_VERSION_ID;' 2>/dev/null || true)
+if [ -z "$PHP_VERSION_ID" ]; then
+  echo "[do-rector] error: unable to read PHP_VERSION_ID from '$PHP_BIN'." >&2
+  exit 1
+fi
+
+if [ "$PHP_VERSION_ID" -lt 80100 ]; then
+  echo "[do-rector] error: PHP >= 8.1 required. '$PHP_BIN' reports version id $PHP_VERSION_ID." >&2
+  exit 1
+fi
+
+cmd=("$PHP_BIN" "$RECTOR_BIN" process --config="$CONFIG")
+
+if [ -f "$AUTOLOAD" ]; then
+  cmd+=(--autoload-file "$AUTOLOAD")
+else
+  echo "[do-rector] warning: autoload file not found at '$AUTOLOAD'; continuing without it" >&2
+fi
+
+cmd+=("$RECTOR_PATHS")
+cmd+=("$@")
+
+exec "${cmd[@]}"
